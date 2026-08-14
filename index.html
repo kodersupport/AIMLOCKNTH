@@ -3587,6 +3587,7 @@
             let boosterActive = false;
             let boosterTimeout = null;
             let boosterCleanup = null;
+            let boosterLaunchAttempted = false;
 
             function safeLaunchGame(game) {
                 const gameData = GAME_URLS[game];
@@ -3598,32 +3599,42 @@
                     return true;
                 }
 
+                // Sử dụng anchor để trigger deep link - cách an toàn cho iOS Safari
                 const deepLink = gameData.ios;
                 const anchor = document.createElement('a');
                 anchor.href = deepLink;
                 anchor.style.display = 'none';
                 anchor.target = '_blank';
                 document.body.appendChild(anchor);
-
-                let fallbackTimer = setTimeout(() => {
-                    anchor.remove();
-                    showBoosterFailed();
-                }, 1500);
-
                 anchor.click();
 
+                // Xóa anchor sau khi click
                 setTimeout(() => {
                     if (anchor.parentNode) anchor.remove();
                 }, 100);
 
+                // Theo dõi visibility change để biết app đã mở
+                let appOpened = false;
                 const visibilityHandler = () => {
                     if (document.hidden) {
-                        clearTimeout(fallbackTimer);
+                        appOpened = true;
                         document.removeEventListener('visibilitychange', visibilityHandler);
-                        updateBoosterSuccess(game);
+                        // Không gọi updateBoosterSuccess ở đây vì có thể là chuyển tab
                     }
                 };
                 document.addEventListener('visibilitychange', visibilityHandler);
+
+                // Fallback: nếu sau 2.5s mà không có dấu hiệu mở app
+                const fallbackTimer = setTimeout(() => {
+                    document.removeEventListener('visibilitychange', visibilityHandler);
+                    if (!appOpened) {
+                        // Không thể xác nhận app đã mở
+                        showBoosterFailed('Không thể mở game. Vui lòng kiểm tra xem game đã được cài đặt chưa.');
+                    } else {
+                        // App đã mở (dựa trên visibility change)
+                        updateBoosterSuccess(game);
+                    }
+                }, 2500);
 
                 boosterCleanup = () => {
                     clearTimeout(fallbackTimer);
@@ -3631,10 +3642,33 @@
                     if (anchor.parentNode) anchor.remove();
                 };
 
+                // Nếu app đã được mở (visibility change), clear fallback
+                const originalVisibilityHandler = visibilityHandler;
+                const enhancedHandler = () => {
+                    if (document.hidden) {
+                        appOpened = true;
+                        document.removeEventListener('visibilitychange', enhancedHandler);
+                        clearTimeout(fallbackTimer);
+                        updateBoosterSuccess(game);
+                    }
+                };
+                document.removeEventListener('visibilitychange', visibilityHandler);
+                document.addEventListener('visibilitychange', enhancedHandler);
+
+                boosterCleanup = () => {
+                    clearTimeout(fallbackTimer);
+                    document.removeEventListener('visibilitychange', enhancedHandler);
+                    if (anchor.parentNode) anchor.remove();
+                };
+
                 return true;
             }
 
             function autoLaunchGame() {
+                if (boosterActive) return;
+                boosterActive = true;
+                boosterLaunchAttempted = false;
+
                 const overlay = document.getElementById('boosterOverlay');
                 if (!overlay) return;
                 const title = document.getElementById('boosterOverlayTitle');
@@ -3670,14 +3704,26 @@
                             'FREE FIRE' : 'FREE FIRE MAX'); }
                 }, 100);
 
+                // Thực hiện launch game ngay lập tức
+                boosterLaunchAttempted = true;
+                localStorage.setItem('aimlock_selected_game', selectedGame);
+
+                // Thêm log vào terminal
+                addTerminalLog('🚀 BOOSTER INITIALIZING...', 'highlight');
+                addTerminalLog(`🎯 GAME DETECTED: ${selectedGame === 'freefire' ? 'FREE FIRE' : 'FREE FIRE MAX'}`, 'info');
+
+                const success = safeLaunchGame(selectedGame);
+                if (!success) {
+                    clearInterval(progressInterval);
+                    showBoosterFailed('Không thể khởi động game. Vui lòng thử lại.');
+                }
+
                 boosterTimeout = setTimeout(() => {
-                    localStorage.setItem('aimlock_selected_game', selectedGame);
-                    const success = safeLaunchGame(selectedGame);
-                    if (!success) {
+                    if (!boosterLaunchAttempted) {
                         clearInterval(progressInterval);
-                        showBoosterFailed();
+                        showBoosterFailed('Không thể khởi động game. Vui lòng thử lại.');
                     }
-                }, 1500);
+                }, 5000);
 
                 const originalCleanup = boosterCleanup;
                 boosterCleanup = () => {
@@ -3688,7 +3734,7 @@
                 };
             }
 
-            function showBoosterFailed() {
+            function showBoosterFailed(message) {
                 const overlay = document.getElementById('boosterOverlay');
                 if (!overlay) return;
                 const title = document.getElementById('boosterOverlayTitle');
@@ -3700,8 +3746,8 @@
                 const appStoreBtn = document.getElementById('boosterAppStore');
                 if (icon) icon.textContent = '⚠️';
                 if (title) title.textContent = t('booster.failed');
-                if (sub) sub.textContent = t('booster.failedSub');
-                if (status) status.textContent = '📱 ' + t('booster.failedSub');
+                if (sub) sub.textContent = message || t('booster.failedSub');
+                if (status) status.textContent = '📱 ' + (message || t('booster.failedSub'));
                 if (progress) progress.style.width = '100%';
                 if (retryBtn) retryBtn.classList.remove('hidden');
                 if (appStoreBtn) {
@@ -3716,10 +3762,19 @@
                     }
                 }
                 boosterActive = false;
+                boosterLaunchAttempted = false;
                 if (boosterTimeout) { clearTimeout(boosterTimeout);
                     boosterTimeout = null; }
                 if (boosterCleanup) { boosterCleanup();
                     boosterCleanup = null; }
+                addTerminalLog('❌ GAME LAUNCH FAILED', 'error');
+                // Reset button
+                const boosterBtn = document.getElementById('boosterBtn');
+                const iconBtn = document.getElementById('boosterIcon');
+                const labelBtn = document.getElementById('boosterLabel');
+                if (boosterBtn) boosterBtn.classList.remove('loading');
+                if (iconBtn) iconBtn.textContent = '🚀';
+                if (labelBtn) labelBtn.textContent = t('booster.label');
             }
 
             function updateBoosterSuccess(game) {
@@ -3733,8 +3788,8 @@
                 const retryBtn = document.getElementById('boosterRetry');
                 const appStoreBtn = document.getElementById('boosterAppStore');
                 if (icon) icon.textContent = '✅';
-                if (title) title.textContent = t('booster.success');
-                if (sub) sub.textContent = t('booster.successSub');
+                if (title) title.textContent = '✅ GAME LAUNCHED!';
+                if (sub) sub.textContent = 'Free Fire đã được mở. Chúc bạn chơi game vui vẻ!';
                 if (status) status.textContent = '🎮 ' + (game === 'freefire' ? 'FREE FIRE' : 'FREE FIRE MAX');
                 if (progress) progress.style.width = '100%';
                 if (retryBtn) retryBtn.classList.add('hidden');
@@ -3742,14 +3797,22 @@
                 selectedGame = game;
                 localStorage.setItem('aimlock_selected_game', game);
                 boosterActive = false;
+                boosterLaunchAttempted = false;
                 if (boosterTimeout) { clearTimeout(boosterTimeout);
                     boosterTimeout = null; }
                 if (boosterCleanup) { boosterCleanup();
                     boosterCleanup = null; }
+                addTerminalLog('✅ GAME LAUNCHED', 'success');
+                // Reset button
+                const boosterBtn = document.getElementById('boosterBtn');
+                const iconBtn = document.getElementById('boosterIcon');
+                const labelBtn = document.getElementById('boosterLabel');
+                if (boosterBtn) boosterBtn.classList.remove('loading');
+                if (iconBtn) iconBtn.textContent = '🚀';
+                if (labelBtn) labelBtn.textContent = t('booster.label');
                 setTimeout(() => {
                     overlay.classList.remove('show');
-                    resetBoosterButton();
-                }, 2000);
+                }, 3000);
             }
 
             function resetBoosterButton() {
@@ -3761,6 +3824,7 @@
                 if (btn) { btn.style.opacity = '1';
                     btn.classList.remove('loading'); }
                 boosterActive = false;
+                boosterLaunchAttempted = false;
                 if (boosterTimeout) { clearTimeout(boosterTimeout);
                     boosterTimeout = null; }
                 if (boosterCleanup) { boosterCleanup();
@@ -3873,6 +3937,123 @@
                 renderSmartControls();
                 showToast('Đã khôi phục SMART CONTROL', '↻', '#FF6B82');
                 playClickSound('success');
+            }
+
+            // ============================================================
+            // ENABLE ALL - NÂNG CẤP
+            // ============================================================
+            function enableAllFeatures() {
+                if (settings.confirmEnable) {
+                    if (!confirm(t('toast.allEnabled') + '?')) return;
+                }
+                playClickSound('boost');
+                const btn = document.getElementById('enableAll');
+                if (btn) {
+                    btn.classList.add('loading');
+                    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> <span>⚡ ENABLING ALL...</span>';
+                }
+
+                // Log
+                addTerminalLog('⚡ ENABLE ALL STARTED', 'highlight');
+                addConsoleLog('⚡ SYSTEM: ENABLE ALL STARTED', 'highlight');
+
+                // 1. Bật tất cả FEATURES
+                let featureCount = 0;
+                featureList.forEach((f, index) => {
+                    setTimeout(() => {
+                        const success = Math.random() > 0.05;
+                        if (success) {
+                            setFeatureState(f.id, true);
+                            featureCount++;
+                        }
+                        // Log từng feature
+                        if (index === featureList.length - 1) {
+                            addTerminalLog(`✅ FEATURES: ${featureCount}/${featureList.length} ENABLED`, 'success');
+                            addConsoleLog(`✅ SYSTEM: FEATURES ${featureCount}/${featureList.length} ENABLED`, 'success');
+                        }
+                    }, index * 150);
+                });
+
+                // 2. Đặt SMART CONTROL lên 100%
+                setTimeout(() => {
+                    smartKeys.forEach(key => {
+                        smartValues[key] = 100;
+                    });
+                    saveSmartValues();
+                    renderSmartControls();
+                    addTerminalLog('✅ SMART CONTROL: 100%', 'success');
+                    addConsoleLog('✅ SYSTEM: SMART CONTROL 100%', 'success');
+                }, featureList.length * 150 + 200);
+
+                // 3. Cập nhật UI sau khi hoàn tất
+                const totalTime = featureList.length * 150 + 500;
+                setTimeout(() => {
+                    // Render lại features để đảm bảo UI đồng bộ
+                    renderFeatures();
+
+                    // Kiểm tra tất cả đã bật chưa
+                    const allEnabled = featureList.every(f => getFeatureState(f.id));
+                    const allSmart = smartKeys.every(key => smartValues[key] === 100);
+
+                    if (allEnabled && allSmart) {
+                        showToast('✅ Đã bật tất cả chức năng', '✅', '#3B9FD9');
+                        addTerminalLog('✅ ALL FEATURES ENABLED', 'success');
+                        addConsoleLog('✅ SYSTEM: ALL FEATURES ENABLED', 'success');
+                        if (btn) {
+                            btn.innerHTML = '<i class="fas fa-bolt"></i> <span>BẬT TẤT CẢ</span>';
+                            btn.classList.remove('loading');
+                        }
+                    } else {
+                        showToast('⚠ Một số chức năng không thể bật', '⚠️', '#FFC107');
+                        addTerminalLog('⚠ SOME FEATURES FAILED TO ENABLE', 'error');
+                        addConsoleLog('⚠ SYSTEM: SOME FEATURES FAILED', 'error');
+                        if (btn) {
+                            btn.innerHTML = '<i class="fas fa-bolt"></i> <span>BẬT TẤT CẢ</span>';
+                            btn.classList.remove('loading');
+                        }
+                    }
+                    playClickSound('success');
+                }, totalTime);
+            }
+
+            // ============================================================
+            // DISABLE ALL - GIỮ NGUYÊN
+            // ============================================================
+            function disableAllFeatures() {
+                if (settings.confirmDisable) {
+                    if (!confirm(t('toast.allDisabled') + '?')) return;
+                }
+                playClickSound('toggle');
+                const btn = document.getElementById('disableAll');
+                if (btn) btn.classList.add('loading');
+                addTerminalLog('⏹ DISABLE ALL STARTED', 'info');
+                addConsoleLog('⏹ SYSTEM: DISABLE ALL STARTED', 'info');
+
+                let completed = 0;
+                const total = featureList.length;
+
+                // Tắt features
+                featureList.forEach((f, index) => {
+                    setTimeout(() => {
+                        setFeatureState(f.id, false);
+                        completed++;
+                        if (completed === total || index === total - 1) {
+                            // Tắt smart control về 0
+                            smartKeys.forEach(key => {
+                                smartValues[key] = 0;
+                            });
+                            saveSmartValues();
+                            renderSmartControls();
+
+                            if (btn) btn.classList.remove('loading');
+                            showToast(t('toast.allDisabled'), '⏹', '#6C8796');
+                            addTerminalLog('⏹ All features disabled', 'info');
+                            addConsoleLog('⏹ SYSTEM: ALL FEATURES DISABLED', 'info');
+                            renderFeatures();
+                            playClickSound('toggle');
+                        }
+                    }, index * 150);
+                });
             }
 
             // ============================================================
@@ -4204,60 +4385,6 @@
                 }, 800);
             }
 
-            function enableAllFeatures() {
-                if (settings.confirmEnable) {
-                    if (!confirm(t('toast.allEnabled') + '?')) return;
-                }
-                playClickSound('boost');
-                const btn = document.getElementById('enableAll');
-                if (btn) btn.classList.add('loading');
-                let completed = 0;
-                const total = featureList.length;
-                featureList.forEach((f, index) => {
-                    setTimeout(() => {
-                        const success = Math.random() > 0.05;
-                        if (success) {
-                            setFeatureState(f.id, true);
-                            completed++;
-                        }
-                        if (completed === total || index === total - 1) {
-                            if (btn) btn.classList.remove('loading');
-                            const allEnabled = featureList.every(f => getFeatureState(f.id));
-                            if (allEnabled) {
-                                showToast(t('toast.allEnabled'), '✅', '#3B9FD9');
-                                addTerminalLog('✅ All features enabled', 'success');
-                            } else {
-                                showToast('⚠ Some features could not be enabled', '⚠️', '#FFC107');
-                            }
-                            renderFeatures();
-                        }
-                    }, index * 300);
-                });
-            }
-
-            function disableAllFeatures() {
-                if (settings.confirmDisable) {
-                    if (!confirm(t('toast.allDisabled') + '?')) return;
-                }
-                playClickSound('toggle');
-                const btn = document.getElementById('disableAll');
-                if (btn) btn.classList.add('loading');
-                let completed = 0;
-                const total = featureList.length;
-                featureList.forEach((f, index) => {
-                    setTimeout(() => {
-                        setFeatureState(f.id, false);
-                        completed++;
-                        if (completed === total || index === total - 1) {
-                            if (btn) btn.classList.remove('loading');
-                            showToast(t('toast.allDisabled'), '⏹', '#6C8796');
-                            addTerminalLog('⏹ All features disabled', 'info');
-                            renderFeatures();
-                        }
-                    }, index * 200);
-                });
-            }
-
             // ============================================================
             // LOGIN
             // ============================================================
@@ -4453,6 +4580,21 @@
                         setTimeout(() => this.classList.remove('pressed'), 200);
                     });
                 });
+
+                // Khôi phục state nếu có
+                if (settings.autoRestore) {
+                    const savedFeatures = localStorage.getItem('aimlock_features');
+                    if (savedFeatures) {
+                        try {
+                            const parsed = JSON.parse(savedFeatures);
+                            Object.keys(parsed).forEach(fid => {
+                                if (parsed[fid]) {
+                                    setFeatureState(fid, true);
+                                }
+                            });
+                        } catch (e) {}
+                    }
+                }
             }
 
             // ============================================================
@@ -5028,14 +5170,14 @@
             if (retryBtn) {
                 retryBtn.addEventListener('click', function() {
                     playClickSound('toggle');
-                    boosterActive = true;
-                    const icon = document.getElementById('boosterIcon');
-                    const label = document.getElementById('boosterLabel');
-                    if (icon) icon.textContent = '⏳';
-                    if (label) label.textContent = 'LAUNCHING...';
-                    const btn = document.getElementById('boosterBtn');
-                    if (btn) btn.classList.add('loading');
-                    autoLaunchGame();
+                    // Reset booster state
+                    const overlay = document.getElementById('boosterOverlay');
+                    if (overlay) overlay.classList.remove('show');
+                    resetBoosterButton();
+                    // Retry
+                    setTimeout(() => {
+                        boosterBtn?.click();
+                    }, 300);
                 });
             }
             const boosterClose = document.getElementById('boosterClose');
