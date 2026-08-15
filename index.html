@@ -1706,10 +1706,10 @@
                 <div class="card">
                     <button class="close-btn" id="boosterClose"><i class="fas fa-times"></i></button>
                     <span class="icon" id="boosterOverlayIcon">⚡</span>
-                    <div class="title" id="boosterOverlayTitle" data-i18n="booster.initializing">BOOSTER INITIALIZING...</div>
-                    <div class="sub" id="boosterOverlaySub" data-i18n="booster.preparing">Đang chuẩn bị khởi động game</div>
+                    <div class="title" id="boosterOverlayTitle">BOOSTER ĐANG KHỞI ĐỘNG...</div>
+                    <div class="sub" id="boosterOverlaySub">Đang chuẩn bị khởi động game</div>
                     <div class="progress-bar"><div class="progress-fill" id="boosterProgress" style="width:0%;"></div></div>
-                    <div class="status-text" id="boosterStatus" data-i18n="booster.status">Đang khởi tạo...</div>
+                    <div class="status-text" id="boosterStatus">Đang khởi tạo...</div>
                     <button class="btn-retry hidden" id="boosterRetry" data-i18n="booster.retry">🔄 THỬ LẠI</button>
                     <button class="btn-appstore hidden" id="boosterAppStore" data-i18n="booster.appstore">📲 MỞ APP STORE</button>
                 </div>
@@ -2120,15 +2120,15 @@
                     'controls.enable': 'BẬT TẤT CẢ',
                     'controls.disable': 'TẮT TẤT CẢ',
                     'booster.label': 'BOOST NOW',
-                    'booster.initializing': '⚡ BOOSTER INITIALIZING...',
-                    'booster.preparing': 'Đang chuẩn bị khởi động game',
-                    'booster.searching': '🔍 SEARCHING GAME...',
-                    'booster.launching': '🎮 LAUNCHING GAME...',
+                    'booster.initializing': '🚀 BOOSTER ĐANG KHỞI ĐỘNG...',
+                    'booster.preparing': 'Đang kiểm tra và mở game...',
+                    'booster.searching': '🔍 ĐANG TÌM GAME...',
+                    'booster.launching': '🎮 ĐANG MỞ FREE FIRE...',
                     'booster.launchingSub': 'Vui lòng đợi trong giây lát',
-                    'booster.success': '✅ GAME LAUNCHED!',
+                    'booster.success': '✅ ĐÃ GỬI LỆNH MỞ GAME – ĐANG VÀO FREE FIRE...',
                     'booster.successSub': 'Chúc bạn chơi game vui vẻ!',
-                    'booster.failed': '⚠️ UNABLE TO LAUNCH GAME',
-                    'booster.failedSub': 'Không thể mở game, vui lòng vào game thủ công',
+                    'booster.failed': '❌ KHÔNG THỂ MỞ GAME – HÃY CÀI FREE FIRE HOẶC FREE FIRE MAX.',
+                    'booster.failedSub': 'Không tìm thấy Free Fire hoặc Free Fire MAX trên thiết bị',
                     'booster.retry': '🔄 THỬ LẠI',
                     'booster.appstore': '📲 MỞ APP STORE',
                     'booster.status': 'Đang khởi tạo...',
@@ -2336,15 +2336,15 @@
                     'controls.enable': 'ENABLE ALL',
                     'controls.disable': 'DISABLE ALL',
                     'booster.label': 'BOOST NOW',
-                    'booster.initializing': '⚡ BOOSTER INITIALIZING...',
-                    'booster.preparing': 'Preparing to launch game',
+                    'booster.initializing': '🚀 BOOSTER INITIALIZING...',
+                    'booster.preparing': 'Checking and launching game...',
                     'booster.searching': '🔍 SEARCHING GAME...',
-                    'booster.launching': '🎮 LAUNCHING GAME...',
+                    'booster.launching': '🎮 LAUNCHING FREE FIRE...',
                     'booster.launchingSub': 'Please wait a moment',
-                    'booster.success': '✅ GAME LAUNCHED!',
+                    'booster.success': '✅ GAME LAUNCH COMMAND SENT – ENTERING FREE FIRE...',
                     'booster.successSub': 'Enjoy your game!',
-                    'booster.failed': '⚠️ UNABLE TO LAUNCH GAME',
-                    'booster.failedSub': 'Cannot open game, please open manually',
+                    'booster.failed': '❌ CANNOT OPEN GAME – PLEASE INSTALL FREE FIRE OR FREE FIRE MAX.',
+                    'booster.failedSub': 'Free Fire or Free Fire MAX not found on device',
                     'booster.retry': '🔄 RETRY',
                     'booster.appstore': '📲 OPEN APP STORE',
                     'booster.status': 'Initializing...',
@@ -3574,13 +3574,25 @@
             }
 
             // ============================================================
-            // BOOSTER - SAFARI SAFE
+            // BOOSTER - NÂNG CẤP CHUẨN YÊU CẦU
             // ============================================================
             const GAME_URLS = {
-                freefire: { ios: 'com.dts.freefireth://', ios2: 'freefire://', appStore: 'https://apps.apple.com/app/free-fire/id1300146617',
-                    name: 'Free Fire' },
-                max: { ios: 'com.dts.freefiremax://', ios2: 'freefiremax://', appStore: 'https://apps.apple.com/app/free-fire-max/id1554100000',
-                    name: 'Free Fire MAX' }
+                freefire: {
+                    ios: 'com.dts.freefireth://',
+                    ios2: 'freefire://',
+                    android: 'intent://com.dts.freefireth/#Intent;action=android.intent.action.VIEW;package=com.dts.freefireth;end',
+                    appStore: 'https://apps.apple.com/app/free-fire/id1300146617',
+                    playStore: 'https://play.google.com/store/apps/details?id=com.dts.freefireth',
+                    name: 'Free Fire'
+                },
+                max: {
+                    ios: 'com.dts.freefiremax://',
+                    ios2: 'freefiremax://',
+                    android: 'intent://com.dts.freefiremax/#Intent;action=android.intent.action.VIEW;package=com.dts.freefiremax;end',
+                    appStore: 'https://apps.apple.com/app/free-fire-max/id1554100000',
+                    playStore: 'https://play.google.com/store/apps/details?id=com.dts.freefiremax',
+                    name: 'Free Fire MAX'
+                }
             };
 
             let selectedGame = localStorage.getItem('aimlock_selected_game') || 'freefire';
@@ -3588,231 +3600,294 @@
             let boosterTimeout = null;
             let boosterCleanup = null;
             let boosterLaunchAttempted = false;
+            let boosterVisibilityHandler = null;
+            let boosterProgressInterval = null;
+            let boosterIsSuccess = false;
 
-            function safeLaunchGame(game) {
-                const gameData = GAME_URLS[game];
-                if (!gameData) return false;
+            function launchGameWithPriority() {
+                // Bước 1: Hiển thị BOOSTER ĐANG KHỞI ĐỘNG
+                updateBoosterUI('initializing', '🚀 BOOSTER ĐANG KHỞI ĐỘNG...', 'Đang kiểm tra và mở game...', 'Đang khởi tạo...', 0);
 
+                // Bước 2: Kiểm tra và thử mở game theo thứ tự
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                if (!isIOS) {
+                const isAndroid = /Android/.test(navigator.userAgent);
+
+                // Thử mở Free Fire trước
+                const gameData = GAME_URLS.freefire;
+                let launched = false;
+
+                // Cập nhật UI: ĐANG TÌM GAME
+                updateBoosterUI('searching', '🔍 ĐANG TÌM GAME...', 'Đang tìm Free Fire...', '🔍 Searching...', 30);
+
+                // Tạo deep link
+                if (isIOS) {
+                    // iOS - URL Scheme
+                    const deepLink = gameData.ios || gameData.ios2;
+                    if (deepLink) {
+                        const anchor = document.createElement('a');
+                        anchor.href = deepLink;
+                        anchor.style.display = 'none';
+                        anchor.target = '_blank';
+                        document.body.appendChild(anchor);
+                        anchor.click();
+                        setTimeout(() => {
+                            if (anchor.parentNode) anchor.remove();
+                        }, 100);
+                        launched = true;
+                    }
+                } else if (isAndroid) {
+                    // Android - Intent
+                    try {
+                        const intentUrl = gameData.android;
+                        if (intentUrl) {
+                            window.open(intentUrl, '_blank');
+                            launched = true;
+                            // Thử fallback deep link
+                            setTimeout(() => {
+                                const fallbackLink = gameData.ios || gameData.ios2;
+                                if (fallbackLink) {
+                                    const anchor = document.createElement('a');
+                                    anchor.href = fallbackLink;
+                                    anchor.style.display = 'none';
+                                    anchor.target = '_blank';
+                                    document.body.appendChild(anchor);
+                                    anchor.click();
+                                    setTimeout(() => {
+                                        if (anchor.parentNode) anchor.remove();
+                                    }, 100);
+                                }
+                            }, 300);
+                        }
+                    } catch (e) {
+                        launched = false;
+                    }
+                } else {
+                    // Web - mở trang chủ
                     window.open('https://ff.garena.com/vi/', '_blank');
-                    return true;
+                    launched = true;
                 }
 
-                // Sử dụng anchor để trigger deep link - cách an toàn cho iOS Safari
-                const deepLink = gameData.ios;
-                const anchor = document.createElement('a');
-                anchor.href = deepLink;
-                anchor.style.display = 'none';
-                anchor.target = '_blank';
-                document.body.appendChild(anchor);
-                anchor.click();
-
-                // Xóa anchor sau khi click
-                setTimeout(() => {
-                    if (anchor.parentNode) anchor.remove();
-                }, 100);
-
-                // Theo dõi visibility change để biết app đã mở
-                let appOpened = false;
-                const visibilityHandler = () => {
-                    if (document.hidden) {
-                        appOpened = true;
-                        document.removeEventListener('visibilitychange', visibilityHandler);
-                        // Không gọi updateBoosterSuccess ở đây vì có thể là chuyển tab
-                    }
-                };
-                document.addEventListener('visibilitychange', visibilityHandler);
-
-                // Fallback: nếu sau 2.5s mà không có dấu hiệu mở app
-                const fallbackTimer = setTimeout(() => {
-                    document.removeEventListener('visibilitychange', visibilityHandler);
-                    if (!appOpened) {
-                        // Không thể xác nhận app đã mở
-                        showBoosterFailed('Không thể mở game. Vui lòng kiểm tra xem game đã được cài đặt chưa.');
+                if (!launched) {
+                    // Không thể mở Free Fire, thử Free Fire MAX
+                    const maxData = GAME_URLS.max;
+                    if (isIOS) {
+                        const deepLink = maxData.ios || maxData.ios2;
+                        if (deepLink) {
+                            const anchor = document.createElement('a');
+                            anchor.href = deepLink;
+                            anchor.style.display = 'none';
+                            anchor.target = '_blank';
+                            document.body.appendChild(anchor);
+                            anchor.click();
+                            setTimeout(() => {
+                                if (anchor.parentNode) anchor.remove();
+                            }, 100);
+                            launched = true;
+                        }
+                    } else if (isAndroid) {
+                        try {
+                            const intentUrl = maxData.android;
+                            if (intentUrl) {
+                                window.open(intentUrl, '_blank');
+                                launched = true;
+                                setTimeout(() => {
+                                    const fallbackLink = maxData.ios || maxData.ios2;
+                                    if (fallbackLink) {
+                                        const anchor = document.createElement('a');
+                                        anchor.href = fallbackLink;
+                                        anchor.style.display = 'none';
+                                        anchor.target = '_blank';
+                                        document.body.appendChild(anchor);
+                                        anchor.click();
+                                        setTimeout(() => {
+                                            if (anchor.parentNode) anchor.remove();
+                                        }, 100);
+                                    }
+                                }, 300);
+                            }
+                        } catch (e) {
+                            launched = false;
+                        }
                     } else {
-                        // App đã mở (dựa trên visibility change)
-                        updateBoosterSuccess(game);
+                        window.open('https://ff.garena.com/vi/', '_blank');
+                        launched = true;
                     }
-                }, 2500);
+                }
 
-                boosterCleanup = () => {
-                    clearTimeout(fallbackTimer);
-                    document.removeEventListener('visibilitychange', visibilityHandler);
-                    if (anchor.parentNode) anchor.remove();
-                };
+                // Bước 3: Khi đã gửi lệnh mở game
+                if (launched) {
+                    updateBoosterUI('launching', '🎮 ĐANG MỞ FREE FIRE...', 'Đã gửi lệnh mở game...', '⏳ Đang vào Free Fire...', 60);
+                    addTerminalLog('✅ ĐÃ GỬI LỆNH MỞ GAME', 'success');
+                    addConsoleLog('✅ BOOSTER: LAUNCH COMMAND SENT', 'success');
 
-                // Nếu app đã được mở (visibility change), clear fallback
-                const originalVisibilityHandler = visibilityHandler;
-                const enhancedHandler = () => {
-                    if (document.hidden) {
-                        appOpened = true;
-                        document.removeEventListener('visibilitychange', enhancedHandler);
+                    // Bước 4: Theo dõi để xác nhận
+                    let appOpened = false;
+                    const visibilityHandler = () => {
+                        if (document.hidden) {
+                            appOpened = true;
+                            document.removeEventListener('visibilitychange', visibilityHandler);
+                            // Xác nhận thành công
+                            boosterIsSuccess = true;
+                            updateBoosterUI('success',
+                                '✅ ĐÃ GỬI LỆNH MỞ GAME – ĐANG VÀO FREE FIRE...',
+                                'Chúc bạn chơi game vui vẻ!',
+                                '🎮 Free Fire đang mở...', 100
+                            );
+                            addTerminalLog('✅ GAME LAUNCHED SUCCESSFULLY', 'success');
+                            addConsoleLog('✅ BOOSTER: GAME LAUNCHED SUCCESSFULLY', 'success');
+                            resetBoosterAfterDelay(3000);
+                        }
+                    };
+                    document.addEventListener('visibilitychange', visibilityHandler);
+                    boosterVisibilityHandler = visibilityHandler;
+
+                    // Fallback nếu không có dấu hiệu mở app
+                    const fallbackTimer = setTimeout(() => {
+                        document.removeEventListener('visibilitychange', visibilityHandler);
+                        if (!appOpened && !document.hidden) {
+                            // Không thể xác nhận
+                            updateBoosterUI('failed',
+                                '❌ KHÔNG THỂ MỞ GAME – HÃY CÀI FREE FIRE HOẶC FREE FIRE MAX.',
+                                'Không tìm thấy Free Fire hoặc Free Fire MAX trên thiết bị',
+                                '❌ Không thể mở game', 100
+                            );
+                            addTerminalLog('❌ GAME LAUNCH FAILED', 'error');
+                            addConsoleLog('❌ BOOSTER: LAUNCH FAILED', 'error');
+                            showToast('❌ KHÔNG THỂ MỞ GAME – HÃY CÀI FREE FIRE HOẶC FREE FIRE MAX.', '❌', '#E65100');
+                            boosterActive = false;
+                        }
+                    }, 5000);
+
+                    boosterCleanup = () => {
                         clearTimeout(fallbackTimer);
-                        updateBoosterSuccess(game);
+                        document.removeEventListener('visibilitychange', visibilityHandler);
+                        boosterVisibilityHandler = null;
+                    };
+
+                } else {
+                    // Không thể gửi lệnh mở game
+                    updateBoosterUI('failed',
+                        '❌ KHÔNG THỂ MỞ GAME – HÃY CÀI FREE FIRE HOẶC FREE FIRE MAX.',
+                        'Không tìm thấy Free Fire hoặc Free Fire MAX trên thiết bị',
+                        '❌ Không thể mở game', 100
+                    );
+                    addTerminalLog('❌ CANNOT OPEN GAME', 'error');
+                    addConsoleLog('❌ BOOSTER: CANNOT OPEN GAME', 'error');
+                    showToast('❌ KHÔNG THỂ MỞ GAME – HÃY CÀI FREE FIRE HOẶC FREE FIRE MAX.', '❌', '#E65100');
+                    boosterActive = false;
+                }
+            }
+
+            function updateBoosterUI(state, title, sub, status, progress) {
+                const overlay = document.getElementById('boosterOverlay');
+                if (!overlay) return;
+
+                const titleEl = document.getElementById('boosterOverlayTitle');
+                const subEl = document.getElementById('boosterOverlaySub');
+                const statusEl = document.getElementById('boosterStatus');
+                const progressEl = document.getElementById('boosterProgress');
+                const iconEl = document.getElementById('boosterOverlayIcon');
+                const retryBtn = document.getElementById('boosterRetry');
+                const appStoreBtn = document.getElementById('boosterAppStore');
+
+                if (titleEl) titleEl.textContent = title;
+                if (subEl) subEl.textContent = sub || 'Vui lòng đợi...';
+                if (statusEl) statusEl.textContent = status || 'Đang xử lý...';
+                if (progressEl) progressEl.style.width = progress + '%';
+
+                if (iconEl) {
+                    if (state === 'initializing') iconEl.textContent = '🚀';
+                    else if (state === 'searching') iconEl.textContent = '🔍';
+                    else if (state === 'launching') iconEl.textContent = '🎮';
+                    else if (state === 'success') iconEl.textContent = '✅';
+                    else if (state === 'failed') iconEl.textContent = '❌';
+                }
+
+                if (state === 'success') {
+                    if (retryBtn) retryBtn.classList.add('hidden');
+                    if (appStoreBtn) appStoreBtn.classList.add('hidden');
+                } else if (state === 'failed') {
+                    if (retryBtn) {
+                        retryBtn.textContent = '🔄 THỬ LẠI';
+                        retryBtn.classList.remove('hidden');
                     }
-                };
-                document.removeEventListener('visibilitychange', visibilityHandler);
-                document.addEventListener('visibilitychange', enhancedHandler);
+                    const gameData = GAME_URLS[selectedGame];
+                    if (appStoreBtn && gameData) {
+                        const storeUrl = /iPad|iPhone|iPod/.test(navigator.userAgent) ? gameData.appStore : gameData
+                            .playStore;
+                        appStoreBtn.textContent = '📲 MỞ APP STORE';
+                        appStoreBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            window.open(storeUrl, '_blank');
+                            playClickSound('toggle');
+                        };
+                        appStoreBtn.classList.remove('hidden');
+                    }
+                } else {
+                    if (retryBtn) retryBtn.classList.add('hidden');
+                    if (appStoreBtn) appStoreBtn.classList.add('hidden');
+                }
 
-                boosterCleanup = () => {
-                    clearTimeout(fallbackTimer);
-                    document.removeEventListener('visibilitychange', enhancedHandler);
-                    if (anchor.parentNode) anchor.remove();
-                };
+                if (!overlay.classList.contains('show')) {
+                    overlay.classList.add('show');
+                }
+            }
 
-                return true;
+            function resetBoosterAfterDelay(delay) {
+                setTimeout(() => {
+                    const overlay = document.getElementById('boosterOverlay');
+                    if (overlay) overlay.classList.remove('show');
+                    resetBoosterButton();
+                }, delay || 3000);
             }
 
             function autoLaunchGame() {
                 if (boosterActive) return;
                 boosterActive = true;
                 boosterLaunchAttempted = false;
+                boosterIsSuccess = false;
 
+                // Hiển thị overlay ngay lập tức
                 const overlay = document.getElementById('boosterOverlay');
-                if (!overlay) return;
-                const title = document.getElementById('boosterOverlayTitle');
-                const sub = document.getElementById('boosterOverlaySub');
-                const status = document.getElementById('boosterStatus');
-                const progress = document.getElementById('boosterProgress');
-                const icon = document.getElementById('boosterOverlayIcon');
-                const retryBtn = document.getElementById('boosterRetry');
-                const appStoreBtn = document.getElementById('boosterAppStore');
-                if (icon) icon.textContent = '⚡';
-                if (title) title.textContent = t('booster.initializing');
-                if (sub) sub.textContent = t('booster.preparing');
-                if (status) status.textContent = t('booster.status');
-                if (progress) progress.style.width = '0%';
-                if (retryBtn) retryBtn.classList.add('hidden');
-                if (appStoreBtn) appStoreBtn.classList.add('hidden');
-                overlay.classList.add('show');
+                if (overlay) overlay.classList.add('show');
 
-                let progressVal = 0;
-                const progressInterval = setInterval(() => {
-                    progressVal += 3;
-                    if (progressVal > 100) { clearInterval(progressInterval);
-                        progressVal = 100; }
-                    if (progress) progress.style.width = progressVal + '%';
-                    if (progressVal < 20) { if (status) status.textContent = t('booster.status'); }
-                    if (progressVal >= 20 && progressVal < 50) { if (status) status.textContent = t(
-                        'booster.searching'); if (icon) icon.textContent = '🔍'; if (title) title.textContent =
-                            t('booster.searching'); }
-                    if (progressVal >= 50 && progressVal < 80) { if (status) status.textContent = t(
-                        'booster.launching'); if (icon) icon.textContent = '🎮'; if (title) title.textContent = t(
-                            'booster.launching'); if (sub) sub.textContent = t('booster.launchingSub'); }
-                    if (progressVal >= 80) { if (status) status.textContent = '🚀 ' + (selectedGame === 'freefire' ?
-                            'FREE FIRE' : 'FREE FIRE MAX'); }
-                }, 100);
+                // Cập nhật nút BOOSTER
+                const boosterBtn = document.getElementById('boosterBtn');
+                const iconBtn = document.getElementById('boosterIcon');
+                const labelBtn = document.getElementById('boosterLabel');
+                if (iconBtn) iconBtn.textContent = '⏳';
+                if (labelBtn) labelBtn.textContent = 'ĐANG MỞ GAME...';
+                if (boosterBtn) boosterBtn.classList.add('loading');
 
-                // Thực hiện launch game ngay lập tức
-                boosterLaunchAttempted = true;
-                localStorage.setItem('aimlock_selected_game', selectedGame);
+                // Bắt đầu quá trình mở game
+                launchGameWithPriority();
 
-                // Thêm log vào terminal
-                addTerminalLog('🚀 BOOSTER INITIALIZING...', 'highlight');
-                addTerminalLog(`🎯 GAME DETECTED: ${selectedGame === 'freefire' ? 'FREE FIRE' : 'FREE FIRE MAX'}`, 'info');
-
-                const success = safeLaunchGame(selectedGame);
-                if (!success) {
-                    clearInterval(progressInterval);
-                    showBoosterFailed('Không thể khởi động game. Vui lòng thử lại.');
-                }
-
+                // Timeout tổng thể
                 boosterTimeout = setTimeout(() => {
-                    if (!boosterLaunchAttempted) {
-                        clearInterval(progressInterval);
-                        showBoosterFailed('Không thể khởi động game. Vui lòng thử lại.');
+                    if (!boosterIsSuccess) {
+                        updateBoosterUI('failed',
+                            '❌ KHÔNG THỂ MỞ GAME – HÃY CÀI FREE FIRE HOẶC FREE FIRE MAX.',
+                            'Không tìm thấy Free Fire hoặc Free Fire MAX trên thiết bị',
+                            '❌ Không thể mở game', 100
+                        );
+                        addTerminalLog('❌ GAME LAUNCH TIMEOUT', 'error');
+                        addConsoleLog('❌ BOOSTER: LAUNCH TIMEOUT', 'error');
+                        boosterActive = false;
                     }
-                }, 5000);
-
-                const originalCleanup = boosterCleanup;
-                boosterCleanup = () => {
-                    clearInterval(progressInterval);
-                    clearTimeout(boosterTimeout);
-                    if (originalCleanup) originalCleanup();
-                    boosterCleanup = null;
-                };
+                }, 10000);
             }
 
             function showBoosterFailed(message) {
-                const overlay = document.getElementById('boosterOverlay');
-                if (!overlay) return;
-                const title = document.getElementById('boosterOverlayTitle');
-                const sub = document.getElementById('boosterOverlaySub');
-                const status = document.getElementById('boosterStatus');
-                const progress = document.getElementById('boosterProgress');
-                const icon = document.getElementById('boosterOverlayIcon');
-                const retryBtn = document.getElementById('boosterRetry');
-                const appStoreBtn = document.getElementById('boosterAppStore');
-                if (icon) icon.textContent = '⚠️';
-                if (title) title.textContent = t('booster.failed');
-                if (sub) sub.textContent = message || t('booster.failedSub');
-                if (status) status.textContent = '📱 ' + (message || t('booster.failedSub'));
-                if (progress) progress.style.width = '100%';
-                if (retryBtn) retryBtn.classList.remove('hidden');
-                if (appStoreBtn) {
-                    appStoreBtn.classList.remove('hidden');
-                    const gameData = GAME_URLS[selectedGame];
-                    if (gameData) {
-                        appStoreBtn.onclick = function(e) {
-                            e.stopPropagation();
-                            window.open(gameData.appStore, '_blank');
-                            playClickSound('toggle');
-                        };
-                    }
-                }
+                updateBoosterUI('failed',
+                    '❌ KHÔNG THỂ MỞ GAME – HÃY CÀI FREE FIRE HOẶC FREE FIRE MAX.',
+                    message || 'Không tìm thấy Free Fire hoặc Free Fire MAX trên thiết bị',
+                    '❌ Không thể mở game', 100
+                );
                 boosterActive = false;
-                boosterLaunchAttempted = false;
                 if (boosterTimeout) { clearTimeout(boosterTimeout);
                     boosterTimeout = null; }
                 if (boosterCleanup) { boosterCleanup();
                     boosterCleanup = null; }
-                addTerminalLog('❌ GAME LAUNCH FAILED', 'error');
-                // Reset button
-                const boosterBtn = document.getElementById('boosterBtn');
-                const iconBtn = document.getElementById('boosterIcon');
-                const labelBtn = document.getElementById('boosterLabel');
-                if (boosterBtn) boosterBtn.classList.remove('loading');
-                if (iconBtn) iconBtn.textContent = '🚀';
-                if (labelBtn) labelBtn.textContent = t('booster.label');
-            }
-
-            function updateBoosterSuccess(game) {
-                const overlay = document.getElementById('boosterOverlay');
-                if (!overlay) return;
-                const title = document.getElementById('boosterOverlayTitle');
-                const sub = document.getElementById('boosterOverlaySub');
-                const status = document.getElementById('boosterStatus');
-                const progress = document.getElementById('boosterProgress');
-                const icon = document.getElementById('boosterOverlayIcon');
-                const retryBtn = document.getElementById('boosterRetry');
-                const appStoreBtn = document.getElementById('boosterAppStore');
-                if (icon) icon.textContent = '✅';
-                if (title) title.textContent = '✅ GAME LAUNCHED!';
-                if (sub) sub.textContent = 'Free Fire đã được mở. Chúc bạn chơi game vui vẻ!';
-                if (status) status.textContent = '🎮 ' + (game === 'freefire' ? 'FREE FIRE' : 'FREE FIRE MAX');
-                if (progress) progress.style.width = '100%';
-                if (retryBtn) retryBtn.classList.add('hidden');
-                if (appStoreBtn) appStoreBtn.classList.add('hidden');
-                selectedGame = game;
-                localStorage.setItem('aimlock_selected_game', game);
-                boosterActive = false;
-                boosterLaunchAttempted = false;
-                if (boosterTimeout) { clearTimeout(boosterTimeout);
-                    boosterTimeout = null; }
-                if (boosterCleanup) { boosterCleanup();
-                    boosterCleanup = null; }
-                addTerminalLog('✅ GAME LAUNCHED', 'success');
-                // Reset button
-                const boosterBtn = document.getElementById('boosterBtn');
-                const iconBtn = document.getElementById('boosterIcon');
-                const labelBtn = document.getElementById('boosterLabel');
-                if (boosterBtn) boosterBtn.classList.remove('loading');
-                if (iconBtn) iconBtn.textContent = '🚀';
-                if (labelBtn) labelBtn.textContent = t('booster.label');
-                setTimeout(() => {
-                    overlay.classList.remove('show');
-                }, 3000);
             }
 
             function resetBoosterButton() {
@@ -3825,10 +3900,19 @@
                     btn.classList.remove('loading'); }
                 boosterActive = false;
                 boosterLaunchAttempted = false;
+                boosterIsSuccess = false;
                 if (boosterTimeout) { clearTimeout(boosterTimeout);
                     boosterTimeout = null; }
                 if (boosterCleanup) { boosterCleanup();
                     boosterCleanup = null; }
+                if (boosterVisibilityHandler) {
+                    document.removeEventListener('visibilitychange', boosterVisibilityHandler);
+                    boosterVisibilityHandler = null;
+                }
+                if (boosterProgressInterval) {
+                    clearInterval(boosterProgressInterval);
+                    boosterProgressInterval = null;
+                }
             }
 
             // ============================================================
@@ -3966,7 +4050,6 @@
                             setFeatureState(f.id, true);
                             featureCount++;
                         }
-                        // Log từng feature
                         if (index === featureList.length - 1) {
                             addTerminalLog(`✅ FEATURES: ${featureCount}/${featureList.length} ENABLED`, 'success');
                             addConsoleLog(`✅ SYSTEM: FEATURES ${featureCount}/${featureList.length} ENABLED`, 'success');
@@ -3988,10 +4071,7 @@
                 // 3. Cập nhật UI sau khi hoàn tất
                 const totalTime = featureList.length * 150 + 500;
                 setTimeout(() => {
-                    // Render lại features để đảm bảo UI đồng bộ
                     renderFeatures();
-
-                    // Kiểm tra tất cả đã bật chưa
                     const allEnabled = featureList.every(f => getFeatureState(f.id));
                     const allSmart = smartKeys.every(key => smartValues[key] === 100);
 
@@ -4032,13 +4112,11 @@
                 let completed = 0;
                 const total = featureList.length;
 
-                // Tắt features
                 featureList.forEach((f, index) => {
                     setTimeout(() => {
                         setFeatureState(f.id, false);
                         completed++;
                         if (completed === total || index === total - 1) {
-                            // Tắt smart control về 0
                             smartKeys.forEach(key => {
                                 smartValues[key] = 0;
                             });
@@ -4127,7 +4205,6 @@
                 resizeGraph();
                 window.addEventListener('resize', resizeGraph);
 
-                // Seed data
                 for (let i = 0; i < 20; i++) {
                     consoleGraphData.push({
                         cpu: 20 + Math.random() * 60,
@@ -4156,7 +4233,6 @@
                 const h = consoleGraphCanvas.height;
                 ctx.clearRect(0, 0, w, h);
 
-                // Grid
                 ctx.strokeStyle = 'rgba(47,168,232,0.05)';
                 ctx.lineWidth = 0.5;
                 for (let i = 0; i < 5; i++) {
@@ -4194,7 +4270,6 @@
                     ctx.stroke();
                     ctx.shadowBlur = 0;
 
-                    // Fill
                     const lastX = ((data.length - 1) / (data.length - 1)) * w;
                     const lastY = h - ((data[data.length - 1] - minVal) / range) * (h - 4) - 2;
                     ctx.lineTo(lastX, h - 2);
@@ -4240,14 +4315,12 @@
             }
 
             // ============================================================
-            // CONSOLE BUTTON HANDLER - WITH FULL FEEDBACK
+            // CONSOLE BUTTON HANDLER
             // ============================================================
             function handleConsoleAction(action, btn) {
-                // 1. PRESSED state
                 btn.classList.add('pressed');
                 playClickSound('toggle');
 
-                // 2. RIPPLE effect
                 const rect = btn.getBoundingClientRect();
                 const ripple = document.createElement('span');
                 ripple.className = 'ripple-console';
@@ -4259,18 +4332,14 @@
                 btn.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 700);
 
-                // 3. EXECUTING state
                 setTimeout(() => {
                     btn.classList.remove('pressed');
                     btn.classList.add('executing');
-                    // Update icon
                     const icon = btn.querySelector('i');
                     if (icon) icon.className = 'fas fa-spinner fa-pulse';
-                    // Update label
                     const labelSpan = btn.querySelector('.label');
                     if (labelSpan) labelSpan.textContent = 'EXECUTING...';
 
-                    // Log to console
                     const actionNames = {
                         unlockFps: 'UNLOCK 120 FPS',
                         readRam: 'ĐỌC RAM',
@@ -4282,10 +4351,8 @@
                     addConsoleLog(`⚡ ACTION: ${actionNames[action] || action}`, 'highlight');
                     addConsoleLog(`⏳ STATUS: EXECUTING...`, 'info');
 
-                    // Simulate execution
                     const executionTime = 800 + Math.random() * 600;
                     setTimeout(() => {
-                        // 4. COMPLETED or FAILED
                         const success = Math.random() > 0.1;
                         btn.classList.remove('executing');
 
@@ -4309,7 +4376,6 @@
                             playClickSound('error');
                         }
 
-                        // Reset after 2s
                         setTimeout(() => {
                             btn.classList.remove('completed', 'failed');
                             const icon3 = btn.querySelector('i');
@@ -4522,7 +4588,6 @@
                 loadSmartValues();
                 renderSmartControls();
 
-                // Init console
                 addConsoleLog('🚀 AIMLOCK SYSTEM READY', 'success');
                 addConsoleLog('📊 PERFORMANCE MONITOR ONLINE', 'highlight');
                 addConsoleLog('✅ SYSTEM CHECK COMPLETE', 'success');
@@ -4531,7 +4596,6 @@
                 addConsoleLog('🎮 FPS STATUS: ACTIVE', 'highlight');
                 initConsoleGraph();
 
-                // Console controls - với feedback đầy đủ
                 const ctrlMap = {
                     ctrlUnlockFps: 'unlockFps',
                     ctrlReadRam: 'readRam',
@@ -4561,7 +4625,6 @@
                     setTimeout(() => this.classList.remove('pressed'), 200);
                 });
 
-                // Mini nav
                 document.querySelectorAll('.console-mini-nav .mini-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         document.querySelectorAll('.console-mini-nav .mini-btn').forEach(b => b.classList.remove('active'));
@@ -4581,7 +4644,6 @@
                     });
                 });
 
-                // Khôi phục state nếu có
                 if (settings.autoRestore) {
                     const savedFeatures = localStorage.getItem('aimlock_features');
                     if (savedFeatures) {
@@ -5156,30 +5218,24 @@
                     this.appendChild(ripple);
                     setTimeout(() => ripple.remove(), 600);
                     if (boosterActive) return;
-                    boosterActive = true;
                     playClickSound('boost');
-                    const icon = document.getElementById('boosterIcon');
-                    const label = document.getElementById('boosterLabel');
-                    if (icon) icon.textContent = '⏳';
-                    if (label) label.textContent = 'LAUNCHING...';
-                    this.classList.add('loading');
                     autoLaunchGame();
                 });
             }
+
             const retryBtn = document.getElementById('boosterRetry');
             if (retryBtn) {
                 retryBtn.addEventListener('click', function() {
                     playClickSound('toggle');
-                    // Reset booster state
                     const overlay = document.getElementById('boosterOverlay');
                     if (overlay) overlay.classList.remove('show');
                     resetBoosterButton();
-                    // Retry
                     setTimeout(() => {
                         boosterBtn?.click();
                     }, 300);
                 });
             }
+
             const boosterClose = document.getElementById('boosterClose');
             if (boosterClose) {
                 boosterClose.addEventListener('click', function() {
