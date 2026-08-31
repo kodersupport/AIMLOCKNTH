@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bảo trì hệ thống</title>
+  <!-- Google Font & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #0b0f1a 0%, #1a1f2f 100%);
+      padding: 1.5rem;
+      margin: 0;
+    }
+
+    .card {
+      max-width: 700px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 3rem;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: transform 0.25s ease;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: scale(1.01);
+    }
+
+    /* icon động */
+    .icon-wrapper {
+      display: inline-block;
+      background: rgba(255, 70, 70, 0.12);
+      padding: 1rem 1.2rem;
+      border-radius: 100px;
+      margin-bottom: 1.8rem;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 100, 100, 0.15);
+      box-shadow: 0 0 30px rgba(255, 60, 60, 0.2);
+      animation: pulseGlow 2.4s infinite alternate;
+    }
+
+    .icon-wrapper i {
+      font-size: 3.8rem;
+      color: #ff6b6b;
+      filter: drop-shadow(0 0 12px rgba(255, 80, 80, 0.6));
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 15px rgba(255, 60, 60, 0.2); }
+      100% { box-shadow: 0 0 40px rgba(255, 80, 80, 0.5); }
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .highlight-error {
+      background: linear-gradient(135deg, #ff8a8a, #ff4d4d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+    }
+
+    .subhead {
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 0.2rem;
+      margin-bottom: 2.2rem;
+      letter-spacing: 0.3px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-bottom: 1.2rem;
+    }
+
+    .main-message {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 2rem;
+      padding: 1.8rem 1.5rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(4px);
+      box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .main-message p {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #f0f3fa;
+      letter-spacing: -0.3px;
+      line-height: 1.4;
+    }
+
+    .main-message i {
+      color: #ffb347;
+      margin: 0 6px;
+    }
+
+    .time-box {
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 60px;
+      padding: 0.9rem 1.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 215, 100, 0.15);
+      margin: 0.5rem 0 1.8rem 0;
+      box-shadow: 0 0 25px rgba(255, 200, 50, 0.05);
+    }
+
+    .time-box i {
+      font-size: 1.6rem;
+      color: #fbbf24;
+      filter: drop-shadow(0 0 8px #fbbf2480);
+    }
+
+    .time-box span {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fde68a, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.5px;
+    }
+
+    .date-detail {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #b9c4dd;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(2px);
+    }
+
+    .date-detail i {
+      margin-right: 10px;
+      color: #94a3b8;
+    }
+
+    .footer-note {
+      margin-top: 2.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 0.5px;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding-top: 2rem;
+    }
+
+    .footer-note i {
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 0.8rem;
+    }
+
+    /* responsive */
+    @media (max-width: 550px) {
+      .card {
+        padding: 2rem 1.5rem;
+        border-radius: 2.2rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .main-message p {
+        font-size: 1.2rem;
+      }
+      .time-box span {
+        font-size: 1.5rem;
+      }
+      .time-box {
+        padding: 0.6rem 1.2rem;
+      }
+      .icon-wrapper i {
+        font-size: 2.8rem;
+      }
+    }
+
+    /* hiệu ứng nhẹ cho số */
+    .time-box span {
+      transition: all 0.2s;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- icon -->
+    <div class="icon-wrapper">
+      <i class="fas fa-triangle-exclamation"></i>
+    </div>
+
+    <!-- tiêu đề chính -->
+    <h1>
+      <span class="highlight-error">HỆ THỐNG</span> ĐANG VẬN HÀNH
+    </h1>
+    <div class="subhead">
+      <i class="fas fa-tools" style="margin-right: 8px; color: #f59e0b;"></i>
+      Quá trình bảo trì đang diễn ra
+    </div>
+
+    <!-- thông báo lỗi + bảo trì -->
+    <div class="main-message">
+      <p>
+        <i class="fas fa-circle-exclamation" style="color: #ff6b6b; margin-right: 8px;"></i>
+        HỆ THỐNG ĐANG LỖI
+        <i class="fas fa-arrow-right" style="margin: 0 10px; color: #fbbf24;"></i>
+        <span style="color: #fcd34d;">BẢO TRÌ</span>
+      </p>
+    </div>
+
+    <!-- thời gian kết thúc nổi bật -->
+    <div class="time-box">
+      <i class="fas fa-clock"></i>
+      <span>11:00 A.m</span>
+    </div>
+
+    <!-- ngày tháng -->
+    <div class="date-detail">
+      <i class="fas fa-calendar-day"></i> 31/8/2026
+    </div>
+
+    <!-- dòng phụ nhẹ nhàng -->
+    <div class="footer-note">
+      <i class="fas fa-circle"></i>
+      <span>Bảo trì sẽ kết thúc vào lúc 11:00 sáng</span>
+      <i class="fas fa-circle"></i>
+    </div>
+  </div>
+</body>
+</html>
